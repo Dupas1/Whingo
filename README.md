@@ -27,7 +27,6 @@ O Whingo proporciona uma plataforma digital que simplifica o processo de aluguel
 - **Kotlin**: Linguagem principal utilizada para o desenvolvimento do aplicativo móvel.
 - **Firebase**: Plataforma para autenticação de usuários, armazenamento de dados e gerenciamento de notificações.
 - **Google Maps API**: Integração para funcionalidades de localização e mapeamento.
-- **Stripe/PayPal**: Para processamento de pagamentos e transações seguras.
 
 ## Contribua
 
