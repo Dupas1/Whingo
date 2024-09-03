@@ -1,6 +1,7 @@
 package com.example.whingo
 
 import android.content.Intent
+import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -36,6 +37,7 @@ class LoginActivity : AppCompatActivity() {
 
             if (email.isNotEmpty() && password.isNotEmpty()){
                 signInWithEmailAndPassword(email, password)
+                Log.d(TAG,"login efetuado")
 
             }else{
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
@@ -43,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding?.tvCreateAccount?.setOnClickListener {
-            val intent = Intent()
+            val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
 
