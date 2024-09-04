@@ -50,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding?.tvEsqueciSenha?.setOnClickListener {
-            val intent = Intent()
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
 
