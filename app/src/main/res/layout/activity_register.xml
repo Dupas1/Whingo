@@ -1,0 +1,118 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:padding="16dp"
+    tools:context=".RegisterActivity">
+
+
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Criar Conta"
+        android:textSize="24sp"
+        android:textColor="#0000FF"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvSubtitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Inscreva-se agora e desfrute da facilidade de aluguel como nunca antes."
+        android:textSize="14sp"
+        android:textColor="#808080"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp"
+        android:gravity="center" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nome"
+        android:inputType="textPersonName"
+        android:textColorHint="#C0C0C0"
+        android:background="@drawable/rounded_edittext"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColorHint="#C0C0C0"
+        android:background="@drawable/rounded_edittext"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Senha"
+        android:inputType="textPassword"
+        android:textColorHint="#C0C0C0"
+        android:background="@drawable/rounded_edittext"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp" />
+
+    <CheckBox
+        android:id="@+id/cbTerms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Concordo com os Termos e Políticas de Privacidade"
+        android:textSize="12sp"
+        android:textColor="#808080"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#007AFF"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"
+        android:padding="12dp" />
+
+    <TextView
+        android:id="@+id/tvOuLogar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ou logar com:"
+        android:textSize="14sp"
+        android:textColor="#808080"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center">
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvPossuiConta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Possui uma conta? Login"
+        android:textSize="14sp"
+        android:textColor="#007AFF"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp" />
+
+</LinearLayout>
