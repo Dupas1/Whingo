@@ -21,7 +21,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
         setContentView(binding?.root)
 
         binding?.ivVoltar?.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -30,7 +30,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
             val email = binding?.edEmailL?.text.toString()
             if (email.isNotEmpty()) {
                 forgotPassword(email)
-                val intent = Intent(this@ForgotPasswordActivity, LoginActivity::class.java)
+                val intent = Intent(this@ForgotPasswordActivity, MainActivity::class.java)
                 startActivity(intent)
             } else {
                 Toast.makeText(baseContext, "Preencha o campo", Toast.LENGTH_LONG).show()
