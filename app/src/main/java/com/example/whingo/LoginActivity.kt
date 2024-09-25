@@ -38,6 +38,8 @@ class LoginActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty()){
                 signInWithEmailAndPassword(email, password)
                 Log.d(TAG,"login efetuado")
+                intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
 
             }else{
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
