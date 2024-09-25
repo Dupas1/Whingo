@@ -23,32 +23,24 @@ class RegisterActivity : AppCompatActivity() {
     private var binding: ActivityRegisterBinding? = null
     private val db = Firebase.firestore
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-        binding?.etBirthDate?.addTextChangedListener(dateWatcher)
 
         auth = Firebase.auth
 
-        binding?.ivVoltar?.setOnClickListener {
-            /*
-            val intent = Intent(this, ::class.java)
-            startActivity(intent)
-            finish()*/
-        }
-
-
         binding?.btnRegister?.setOnClickListener {
-            val name = binding?.etName?.text.toString()
-            val cpf = binding?.etCpf?.text.toString()
-            val birthDate = binding?.etBirthDate?.text.toString()
-            val cel = binding?.etCel?.text.toString()
-            val email = binding?.etEmail?.text.toString()
-            val password = binding?.etPassword?.text.toString()
-            val confirmPassword = binding?.etConfirmPassword?.text.toString()
+            val name = binding?.name?.text.toString()
+            val birthDate = binding?.birthDate?.text.toString()
+            val cpf = binding?.cpf?.text.toString()
+            val cel = binding?.cell?.text.toString()
+            val email = binding?.email?.text.toString()
+            val password = binding?.password?.text.toString()
+            val confirmPassword = binding?.confirmpassword?.text.toString()
+
+
 
             if (name.isNotEmpty() &&
                 cpf.isNotEmpty() &&
@@ -242,8 +234,6 @@ class RegisterActivity : AppCompatActivity() {
             edited = false
         }
     }
-
-
 
 
     companion object{
