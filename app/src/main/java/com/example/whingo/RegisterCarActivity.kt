@@ -1,16 +1,17 @@
 package com.example.whingo
 
-import android.content.Context
+import PhotosAdapter
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.whingo.databinding.ActivityRegisterCarBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 
 class RegisterCarActivity : AppCompatActivity() {
 
@@ -18,14 +19,18 @@ class RegisterCarActivity : AppCompatActivity() {
     private var auth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
 
-    private var isPhotoTaken: Boolean = false // Variável para verificar se a foto foi tirada
+    private val selectedImagesUris = mutableListOf<Uri>() // Lista para armazenar as URIs das imagens selecionadas
+    private lateinit var photosAdapter: PhotosAdapter // Adapter para o RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-
         binding = ActivityRegisterCarBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+
+        // Configurando o RecyclerView para exibir as fotos selecionadas
+        binding?.rvCarPhotos?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        photosAdapter = PhotosAdapter(selectedImagesUris)
+        binding?.rvCarPhotos?.adapter = photosAdapter
 
         binding?.btnRegisterCar?.setOnClickListener {
             val carModel = binding?.etCarModel?.text.toString().toUpperCase()
@@ -33,143 +38,110 @@ class RegisterCarActivity : AppCompatActivity() {
             val carYear = binding?.etCarYear?.text.toString()
             val carPlate = binding?.etCarPlate?.text.toString()
 
-            if (carModel.isNotEmpty() &&
-                carYear.isNotEmpty() &&
-                carColor.isNotEmpty() &&
-                carPlate.isNotEmpty()) {
-
-                if (isPhotoTaken) { // Verifica se a foto foi tirada ou escolhida
-                    createCar(carModel, carColor, carYear, carPlate)
+            // Verifica se todos os campos estão preenchidos e se pelo menos 4 fotos foram selecionadas
+            if (carModel.isNotEmpty() && carYear.isNotEmpty() && carColor.isNotEmpty() && carPlate.isNotEmpty()) {
+                if (selectedImagesUris.size >= 4) {
+                    saveCarWithPhotos(carModel, carColor, carYear, carPlate)
                 } else {
-                    Toast.makeText(this, "Por favor, tire uma foto ou escolha uma imagem.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Por favor, selecione pelo menos 4 fotos.", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
             }
         }
 
-        binding?.btnFoto?.setOnClickListener {
-            cameraProviderResult.launch(android.Manifest.permission.CAMERA)
-        }
-
         binding?.btnAlbum?.setOnClickListener {
-            selectImageInAlbum()
+            selectImagesInAlbum()
         }
     }
 
-    private val cameraProviderResult =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) {
-            if (it) {
-                openCameraPreview()
-            } else {
-                Toast.makeText(baseContext, "VOCE NÃO DEU PERMISSÃO PARA A CAMERA", Toast.LENGTH_LONG).show()
-            }
-        }
-
-    private fun openCameraPreview() {
-        val camera = Intent(this, CameraPreviewActivity::class.java)
-        startActivity(camera)
-    }
-
-    private fun createCar(carModel: String, carColor: String, carYear: String, carPlate: String) {
-        val user = FirebaseAuth.getInstance().currentUser
+    private fun saveCarWithPhotos(carModel: String, carColor: String, carYear: String, carPlate: String) {
+        val user = auth.currentUser
         if (user != null) {
-            saveCarToFirestore(carModel, carColor, carYear, carPlate)
-            Toast.makeText(this, "Carro registrado com sucesso", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "Carro registrado com sucesso")
+            // Salvar as fotos no Firebase Storage
+            savePhotosToFirebase(carPlate) { photoUrls ->
+                saveCarToFirestore(carModel, carColor, carYear, carPlate, photoUrls)
+            }
         } else {
             Log.w(TAG, "SaveCar:failure")
         }
     }
 
-    // Função para salvar o carro no Firestore
-    private fun saveCarToFirestore(carModel: String, carColor: String, carYear: String, carPlate: String) {
-        val userId = auth.currentUser?.uid ?: return // Garante que o userId não é nulo
+    private fun savePhotosToFirebase(carPlate: String, callback: (List<String>) -> Unit) {
+        val storage = FirebaseStorage.getInstance().reference
+        val photoUrls = mutableListOf<String>()
+
+        selectedImagesUris.forEachIndexed { index, uri ->
+            val photoRef = storage.child("car_photos/$carPlate/photo_$index.jpg")
+            photoRef.putFile(uri)
+                .addOnSuccessListener { taskSnapshot ->
+                    photoRef.downloadUrl.addOnSuccessListener { uri ->
+                        photoUrls.add(uri.toString())
+                        // Chama o callback quando todas as fotos foram salvas
+                        if (photoUrls.size == selectedImagesUris.size) {
+                            callback(photoUrls)
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "Error uploading photo: $it")
+                }
+        }
+    }
+
+    private fun saveCarToFirestore(carModel: String, carColor: String, carYear: String, carPlate: String, photoUrls: List<String>) {
+        val userId = auth.currentUser?.uid ?: return
         val car = hashMapOf(
             "userId" to userId,
             "modeloDoCarro" to carModel,
             "CorDoCarro" to carColor,
             "AnoDoCarro" to carYear,
             "PlacaDoCarro" to carPlate,
-            "FotoId" to getPhotoIdFromPreferences() // Adiciona o ID da foto das Shared Preferences
+            "Fotos" to photoUrls
         )
 
         db.collection("Carros")
             .add(car)
             .addOnSuccessListener { documentReference ->
                 Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                // Salvar o ID do documento no SharedPreferences
-                saveDocumentId(documentReference.id)
+                Toast.makeText(this, "Carro registrado com sucesso", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error adding document", e)
             }
     }
 
-    // Função para salvar o ID do documento no SharedPreferences
-    private fun saveDocumentId(documentId: String) {
-        val sharedPreferences = getSharedPreferences("carId", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("documentId", documentId)
-        editor.apply() // Salva as alterações
-    }
-
-    // Função para salvar o ID da foto no SharedPreferences
-    fun savePhotoIdInPreferences(fotoId: String) {
-        val sharedPreferences = getSharedPreferences("carId", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putString("fotoId", fotoId)
-        editor.apply() // Salva as alterações
-        isPhotoTaken = true // Atualiza a variável para indicar que uma foto foi tirada
-    }
-
-    // Função para recuperar o ID da foto das SharedPreferences
-    fun getPhotoIdFromPreferences(): String? {
-        val sharedPreferences = getSharedPreferences("carId", Context.MODE_PRIVATE)
-        return sharedPreferences.getString("fotoId", null)
-    }
-
-    fun isValidBrazilianPlate(plate: String): Boolean {
-        // Regex para o padrão antigo de placas (3 letras + 4 números)
-        val oldPattern = "^[A-Z]{3}[0-9]{4}$".toRegex()
-
-        // Regex para o padrão Mercosul (3 letras + 1 número + 1 letra + 2 números)
-        val mercosulPattern = "^[A-Z]{3}[0-9]{1}[A-Z]{1}[0-9]{2}$".toRegex()
-
-        // Verifica se a placa corresponde a algum dos padrões
-        return plate.matches(oldPattern) || plate.matches(mercosulPattern)
-    }
-
-    fun isValidCarYear(year: String): Boolean {
-        // Verifica se o ano é um número de 4 dígitos
-        return year.matches("^[0-9]{4}$".toRegex())
-    }
-
-    fun isValidColor(color: String): Boolean {
-        // Verifica se a cor é uma string não vazia
-        return color.isNotEmpty()
-    }
-
-    fun selectImageInAlbum() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        if (intent.resolveActivity(packageManager) != null) {
-            startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
+    fun selectImagesInAlbum() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // Permite seleção múltipla
+            type = "image/*"
         }
+        startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
     }
 
-    // Atualize a variável isPhotoTaken após a foto ser escolhida
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == RESULT_OK) {
-            isPhotoTaken = true // Atualiza a variável para indicar que uma foto foi escolhida
-            // Adicione sua lógica para manipular a imagem escolhida aqui
+            data?.clipData?.let { clipData ->
+                for (i in 0 until clipData.itemCount) {
+                    if (selectedImagesUris.size < 4) { // Limita a seleção a 4 imagens
+                        val imageUri = clipData.getItemAt(i).uri
+                        if (!selectedImagesUris.contains(imageUri)) {
+                            selectedImagesUris.add(imageUri) // Adiciona o URI à lista se ainda não estiver
+                        }
+                    }
+                }
+            } ?: data?.data?.let { uri ->
+                if (selectedImagesUris.size < 4 && !selectedImagesUris.contains(uri)) {
+                    selectedImagesUris.add(uri)
+                }
+            }
+            photosAdapter.notifyDataSetChanged() // Atualiza o RecyclerView
         }
     }
 
     companion object {
-        private val REQUEST_TAKE_PHOTO = 0
-        private val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
-        private var TAG = "RegisterCar"
+        private const val REQUEST_SELECT_IMAGE_IN_ALBUM = 1
+        private const val TAG = "RegisterCar"
     }
 }
