@@ -7,70 +7,91 @@
     android:layout_height="match_parent"
     tools:context=".RegisterCarActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <EditText
-            android:id="@+id/etCarModel"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Modelo do Carro"
-            android:inputType="text" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <EditText
-            android:id="@+id/etCarColor"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Cor do Carro"
-            android:inputType="text" />
+            <EditText
+                android:id="@+id/etCarModel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Modelo do Carro "
+                android:inputType="text"
+                android:importantForAutofill="no" />
 
-        <EditText
-            android:id="@+id/etCarYear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Ano do Carro"
-            android:inputType="number" />
+            <EditText
+                android:id="@+id/etCarColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Cor do Carro "
+                android:inputType="text"
+                android:importantForAutofill="no" />
 
-        <EditText
-            android:id="@+id/etCarPlate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Placa do Carro"
-            android:inputType="text" />
+            <EditText
+                android:id="@+id/etCarYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ano do Carro "
+                android:inputType="number"
+                android:importantForAutofill="no" />
 
-        <Button
-            android:id="@+id/btnAlbum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Escolher Foto" />
-    </LinearLayout>
+            <EditText
+                android:id="@+id/etCarPlate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Placa do Carro "
+                android:inputType="text"
+                android:maxLength="7"
+                android:importantForAutofill="no" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCarPhotos"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/btnAlbum"
-        app:layout_constraintBottom_toTopOf="@+id/btnRegisterCar"
-        android:padding="8dp"
-        tools:ignore="NotSibling" />
+            <EditText
+                android:id="@+id/etCarValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Valor da Locação "
+                android:inputType="numberDecimal"
+                android:importantForAutofill="no" />
 
-    <Button
-        android:id="@+id/btnRegisterCar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Registrar Carro"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        android:backgroundTint="@android:color/black"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+            <Button
+                android:id="@+id/btnAlbum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Escolher Fotos (máx. 4)"
+                android:backgroundTint="@color/purple_500"
+                android:textColor="@android:color/white"
+                android:padding="10dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCarPhotos"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/darker_gray"
+                android:padding="8dp"
+                tools:listitem="@layout/item_photo" />
+
+            <Button
+                android:id="@+id/btnRegisterCar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Registrar Carro"
+                android:textSize="18sp"
+                android:backgroundTint="@android:color/holo_blue_dark"
+                android:textColor="@android:color/white"
+                android:padding="12dp" />
+
+        </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp">
+
+    <!-- Imagem do carro -->
+    <ImageView
+        android:id="@+id/ivCarImage"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Nome do carro -->
+    <TextView
+        android:id="@+id/tvCarModel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Nome do Carro"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/ivCarImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Preço do carro -->
+    <TextView
+        android:id="@+id/tvCarPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="R$ 0.00"
+        app:layout_constraintTop_toBottomOf="@id/tvCarModel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Ano do carro -->
+    <TextView
+        android:id="@+id/tvCarYear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Ano: 2020"
+        app:layout_constraintTop_toBottomOf="@id/tvCarPrice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Botão Alugar Carro -->
+    <Button
+        android:id="@+id/btnRentCar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Alugar Carro"
+        app:layout_constraintTop_toBottomOf="@id/tvCarYear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

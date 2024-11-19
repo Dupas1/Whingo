@@ -4,6 +4,8 @@ import PhotosAdapter
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -19,48 +21,71 @@ class RegisterCarActivity : AppCompatActivity() {
     private var auth = FirebaseAuth.getInstance()
     private var db = FirebaseFirestore.getInstance()
 
-    private val selectedImagesUris = mutableListOf<Uri>() // Lista para armazenar as URIs das imagens selecionadas
-    private lateinit var photosAdapter: PhotosAdapter // Adapter para o RecyclerView
+    private val selectedImagesUris = mutableListOf<Uri>()
+    private lateinit var photosAdapter: PhotosAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterCarBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
-        // Configurando o RecyclerView para exibir as fotos selecionadas
-        binding?.rvCarPhotos?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding?.rvCarPhotos?.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         photosAdapter = PhotosAdapter(selectedImagesUris)
         binding?.rvCarPhotos?.adapter = photosAdapter
+
+        binding?.etCarPlate?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s?.length ?: 0 > 7) {
+                    binding?.etCarPlate?.setText(s?.substring(0, 7))
+                    binding?.etCarPlate?.setSelection(7) // Move o cursor para o final
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         binding?.btnRegisterCar?.setOnClickListener {
             val carModel = binding?.etCarModel?.text.toString().toUpperCase()
             val carColor = binding?.etCarColor?.text.toString()
             val carYear = binding?.etCarYear?.text.toString()
             val carPlate = binding?.etCarPlate?.text.toString()
+            val carValueString = binding?.etCarValue?.text.toString()
 
-            // Verifica se todos os campos estão preenchidos e se pelo menos 4 fotos foram selecionadas
-            if (carModel.isNotEmpty() && carYear.isNotEmpty() && carColor.isNotEmpty() && carPlate.isNotEmpty()) {
-                if (selectedImagesUris.size >= 4) {
-                    saveCarWithPhotos(carModel, carColor, carYear, carPlate)
+            if (carModel.isNotEmpty() && carYear.isNotEmpty() && carColor.isNotEmpty() && carPlate.isNotEmpty() && carValueString.isNotEmpty()) {
+                if (carPlate.length <= 7) {
+                    if (selectedImagesUris.size == 4) {
+                        saveCarWithPhotos(carModel, carColor, carYear, carPlate, carValueString)  // Passando carValueString como String
+                    } else {
+                        Toast.makeText(this, "Por favor, selecione exatamente 4 fotos.", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
-                    Toast.makeText(this, "Por favor, selecione pelo menos 4 fotos.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "A placa deve ter no máximo 7 caracteres.", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Preencha todos os campos.", Toast.LENGTH_SHORT).show()
             }
         }
+
+
 
         binding?.btnAlbum?.setOnClickListener {
             selectImagesInAlbum()
         }
     }
 
-    private fun saveCarWithPhotos(carModel: String, carColor: String, carYear: String, carPlate: String) {
+    private fun saveCarWithPhotos(
+        carModel: String,
+        carColor: String,
+        carYear: String,
+        carPlate: String,
+        carValue: String
+    ) {
         val user = auth.currentUser
         if (user != null) {
-            // Salvar as fotos no Firebase Storage
             savePhotosToFirebase(carPlate) { photoUrls ->
-                saveCarToFirestore(carModel, carColor, carYear, carPlate, photoUrls)
+                saveCarToFirestore(carModel, carColor, carYear, carPlate, carValue, photoUrls)
             }
         } else {
             Log.w(TAG, "SaveCar:failure")
@@ -74,10 +99,9 @@ class RegisterCarActivity : AppCompatActivity() {
         selectedImagesUris.forEachIndexed { index, uri ->
             val photoRef = storage.child("car_photos/$carPlate/photo_$index.jpg")
             photoRef.putFile(uri)
-                .addOnSuccessListener { taskSnapshot ->
+                .addOnSuccessListener {
                     photoRef.downloadUrl.addOnSuccessListener { uri ->
                         photoUrls.add(uri.toString())
-                        // Chama o callback quando todas as fotos foram salvas
                         if (photoUrls.size == selectedImagesUris.size) {
                             callback(photoUrls)
                         }
@@ -89,7 +113,14 @@ class RegisterCarActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveCarToFirestore(carModel: String, carColor: String, carYear: String, carPlate: String, photoUrls: List<String>) {
+    private fun saveCarToFirestore(
+        carModel: String,
+        carColor: String,
+        carYear: String,
+        carPlate: String,
+        carValueString: String,  // Agora é String
+        photoUrls: List<String>
+    ) {
         val userId = auth.currentUser?.uid ?: return
         val car = hashMapOf(
             "userId" to userId,
@@ -97,6 +128,7 @@ class RegisterCarActivity : AppCompatActivity() {
             "CorDoCarro" to carColor,
             "AnoDoCarro" to carYear,
             "PlacaDoCarro" to carPlate,
+            "ValorDaLocação" to carValueString,  // Salvando como String
             "Fotos" to photoUrls
         )
 
@@ -105,15 +137,23 @@ class RegisterCarActivity : AppCompatActivity() {
             .addOnSuccessListener { documentReference ->
                 Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                 Toast.makeText(this, "Carro registrado com sucesso", Toast.LENGTH_SHORT).show()
+
+                // Redireciona para a HomeActivity após o registro bem-sucedido
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
+                finish()  // Fecha a RegisterCarActivity
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "Error adding document", e)
+                Toast.makeText(this, "Erro ao registrar o carro", Toast.LENGTH_SHORT).show()
             }
     }
 
+
+
     fun selectImagesInAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // Permite seleção múltipla
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             type = "image/*"
         }
         startActivityForResult(intent, REQUEST_SELECT_IMAGE_IN_ALBUM)
@@ -123,12 +163,11 @@ class RegisterCarActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_SELECT_IMAGE_IN_ALBUM && resultCode == RESULT_OK) {
             data?.clipData?.let { clipData ->
-                for (i in 0 until clipData.itemCount) {
-                    if (selectedImagesUris.size < 4) { // Limita a seleção a 4 imagens
-                        val imageUri = clipData.getItemAt(i).uri
-                        if (!selectedImagesUris.contains(imageUri)) {
-                            selectedImagesUris.add(imageUri) // Adiciona o URI à lista se ainda não estiver
-                        }
+                selectedImagesUris.clear() // Garante que apenas 4 imagens sejam selecionadas
+                for (i in 0 until clipData.itemCount.coerceAtMost(4)) {
+                    val imageUri = clipData.getItemAt(i).uri
+                    if (!selectedImagesUris.contains(imageUri)) {
+                        selectedImagesUris.add(imageUri)
                     }
                 }
             } ?: data?.data?.let { uri ->
@@ -136,7 +175,7 @@ class RegisterCarActivity : AppCompatActivity() {
                     selectedImagesUris.add(uri)
                 }
             }
-            photosAdapter.notifyDataSetChanged() // Atualiza o RecyclerView
+            photosAdapter.notifyDataSetChanged()
         }
     }
 

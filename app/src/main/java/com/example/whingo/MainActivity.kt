@@ -1,51 +1,55 @@
 package com.example.whingo
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.whingo.databinding.ActivityMainBinding
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
 
-
 class MainActivity : AppCompatActivity() {
-    private lateinit var auth: FirebaseAuth
-    private var binding: ActivityMainBinding? = null
-    private var db = FirebaseFirestore.getInstance()
 
+    private lateinit var auth: FirebaseAuth
+    private var db = FirebaseFirestore.getInstance()
+    private var binding: ActivityMainBinding? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
+        // Acessa o SharedPreferences diretamente aqui, sem usar função
+        val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+
+        // Verifica se o usuário já está logado antes de carregar a interface
+        if (isLoggedIn == true) {
+            // Se o usuário já estiver logado, redireciona para HomeActivity
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish() // Fecha a MainActivity para evitar voltar
+            return
+        }
+
+        // Carrega a interface somente se o usuário não estiver logado
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
-        auth = Firebase.auth
+        // Inicializa o FirebaseAuth
+        auth = FirebaseAuth.getInstance()
 
-
-        //binding?.ivVoltar?.setOnClickListener {}
-
-
+        // Botão de login
         binding?.btnLogin?.setOnClickListener {
             val email = binding?.etEmail?.text.toString()
             val password = binding?.etPassword?.text.toString()
 
-            if (email.isNotEmpty() && password.isNotEmpty()){
+            if (email.isNotEmpty() && password.isNotEmpty()) {
                 signInWithEmailAndPassword(email, password)
-                Log.d(TAG,"login efetuado")
-                intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-
-            }else{
+            } else {
                 Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
             }
         }
 
+        // Ações para criar conta e recuperar senha
         binding?.tvCreateAccount?.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
@@ -55,74 +59,29 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ForgotPasswordActivity::class.java)
             startActivity(intent)
         }
-
     }
 
-
+    // Função para realizar o login e armazenar o estado de login
     private fun signInWithEmailAndPassword(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val user = auth.currentUser
-                if (user != null && user.isEmailVerified) {
-                    // Verifique localmente se o usuário é um gerente
-                    /*checkIfUserIsManager(email) { isManager ->
-                        if (isManager) {
-                            // Redireciona o gerente para a atividade específica do gerente
-                            val intent = Intent(this@LoginActivity, ManagerMainActivity::class.java)
-                            startActivity(intent)
-                        } else {
-                            // Redireciona outros usuários para a atividade padrão
-                            val intent = Intent(this@LoginActivity, ClientMainActivity::class.java)
-                            startActivity(intent)
-                        }
-                    }*/
-                } else {
-                    Toast.makeText(baseContext, "Verifique seu email.", Toast.LENGTH_SHORT).show()
+                if (user != null) {
+                    // Armazena o estado de login no SharedPreferences
+                    val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putBoolean("isLoggedIn", true)
+                    editor.apply()
+
+                    // Login bem-sucedido, redireciona para a HomeActivity
+                    val intent = Intent(this, HomeActivity::class.java)
+                    startActivity(intent)
+                    finish() // Fecha a MainActivity para evitar voltar
                 }
             } else {
-                Log.w(TAG, "signInWithEmail:failure", task.exception)
                 Toast.makeText(baseContext, "Falha na Autenticação.", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-
-    // Função para verificar localmente se o usuário é um gerente
-    private fun checkIfUserIsManager(email: String, callback: (Boolean) -> Unit) {
-        val db = FirebaseFirestore.getInstance()
-        val usersRef = db.collection("pessoas").whereEqualTo("email", email)
-
-        usersRef.get().addOnSuccessListener { documents ->
-            if (documents != null && !documents.isEmpty) {
-                val userDocument = documents.documents.first()
-                val isManager = userDocument.getBoolean("gerente") ?: false
-                callback(isManager)
-            } else {
-                // Usuário não encontrado na coleção 'pessoas' ou documento não possui o campo 'gerente'
-                callback(false)
-            }
-        }.addOnFailureListener { exception ->
-            Log.w(TAG, "Error getting documents: ", exception)
-            // Se houver algum erro ao acessar o banco de dados, considere o usuário como não gerente
-            callback(false)
-        }
-    }
-
-    //check se esta logado
-    public override fun onStart() {
-        super.onStart()
-        val user = auth.currentUser
-        if (user != null && user.isEmailVerified) {
-            db.collection("pessoas").document(user.uid).get().addOnSuccessListener {
-                val intent = Intent(this, HomeActivity::class.java)
-                startActivity(intent)
-            }
-        }
-    }
-
-
-    companion object{
-        private var TAG ="EmailAndPassword"
     }
 
     override fun onDestroy() {

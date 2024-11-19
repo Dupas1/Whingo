@@ -66,6 +66,7 @@ dependencies {
     implementation("androidx.camera:camera-view:1.3.3")
     implementation("androidx.camera:camera-camera2:1.3.3")
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation ("com.squareup.picasso:picasso:2.71828")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 
 }
