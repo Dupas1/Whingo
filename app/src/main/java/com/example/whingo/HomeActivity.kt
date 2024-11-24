@@ -50,8 +50,9 @@ class HomeActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         carAdapter = CarAdapter(carList) { car ->
-            val intent = Intent(this, CarDetailsActivity::class.java)
-            intent.putExtra("CAR_DETAILS", car)  // Passando o objeto Car com Parcelable
+            val intent = Intent(this, CarDetailsActivity::class.java).apply {
+                putExtra("CAR_DETAILS", car) // Passando o objeto Car
+            }
             startActivity(intent)
         }
 
@@ -61,29 +62,32 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+
     private fun loadCarsFromDatabase() {
-        firestore.collection("Carros")
-            .get()
-            .addOnSuccessListener { result ->
-                carList.clear()
-                for (document in result) {
-                    val modeloDoCarro = document.getString("modeloDoCarro") ?: ""
+       firestore.collection("Carros")
+           .get()
+           .addOnSuccessListener { result ->
+               carList.clear()
+               for (document in result) {
+                   val modeloDoCarro = document.getString("modeloDoCarro") ?: ""
 
-                    // Tratamento seguro do valor do carro
-                    val valorDoCarroString = document.getString("ValorDaLocação") ?: "0.0"
-                    val valorDoCarro = valorDoCarroString.toDoubleOrNull() ?: 0.0  // Convertendo a string para Double
+                   // Tratamento seguro do valor do carro
+                   val valorDoCarroString = document.getString("ValorDaLocação") ?: "0.0"
+                   val valorDoCarro = valorDoCarroString.toDoubleOrNull() ?: 0.0  // Convertendo a string para Double
 
-                    val fotos = document["Fotos"] as? List<String> ?: listOf()
+                   val fotos = document["Fotos"] as? List<String> ?: listOf()
 
-                    val car = Car(modeloDoCarro, valorDoCarro, fotos.firstOrNull() ?: "", 2024) // Adicionando o ano do carro
-                    carList.add(car)
-                }
-                carAdapter.notifyDataSetChanged()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Erro ao carregar carros: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
+                   // Passando a lista 'fotos' para o construtor do carro
+                   val car = Car(modeloDoCarro, valorDoCarro, fotos, 2024)  // Corrigido
+                   carList.add(car)
+               }
+               carAdapter.notifyDataSetChanged()
+           }
+           .addOnFailureListener { e ->
+               Toast.makeText(this, "Erro ao carregar carros: ${e.message}", Toast.LENGTH_SHORT).show()
+           }
+   }
+
 
     private fun filterByName(query: String) {
         val filteredList = carList.filter { it.name.contains(query, ignoreCase = true) }
