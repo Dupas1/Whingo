@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.whingo.databinding.ActivityCarDetailBinding
 import com.squareup.picasso.Picasso
 
-class CarDetailsActivity : AppCompatActivity() {
+class CarDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCarDetailBinding
 

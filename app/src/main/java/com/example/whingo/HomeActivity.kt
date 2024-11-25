@@ -1,101 +1,57 @@
+// HomeActivity.kt
 package com.example.whingo
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.SearchView
-import android.widget.Toast
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.CompositePageTransformer
+import androidx.viewpager2.widget.MarginPageTransformer
+import com.example.whingo.Adapter.SliderAdapter
+import com.example.whingo.Model.SliderModel
 import com.example.whingo.databinding.ActivityHomeBinding
-import com.google.firebase.firestore.FirebaseFirestore
+import com.example.whingo.ViewModel.HomeViewModel
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
 class HomeActivity : AppCompatActivity() {
 
+    private lateinit var viewModel: HomeViewModel
     private lateinit var binding: ActivityHomeBinding
-    private val firestore = FirebaseFirestore.getInstance()
-    private val carList = mutableListOf<Car>()
-    private lateinit var carAdapter: CarAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupRecyclerView()
-        loadCarsFromDatabase()
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        initBanners()
+    }
 
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                query?.let { filterByName(it) }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                newText?.let { filterByName(it) }
-                return true
-            }
+    private fun initBanners() {
+        binding.progressBarBanner.visibility = View.VISIBLE
+        viewModel.banners.observe(this, Observer {
+            banners(it)
+            binding.progressBarBanner.visibility = View.GONE
         })
-
-        binding.btnFilter.setOnClickListener {
-            val minPrice = binding.etMinPrice.text.toString().toDoubleOrNull() ?: 0.0
-            val maxPrice = binding.etMaxPrice.text.toString().toDoubleOrNull() ?: Double.MAX_VALUE
-            filterByPrice(minPrice, maxPrice)
-        }
-
-        binding.btnAddCar.setOnClickListener {
-            val intent = Intent(this, RegisterCarActivity::class.java)
-            startActivity(intent)
-        }
+        viewModel.loadBanners()
     }
 
-    private fun setupRecyclerView() {
-        carAdapter = CarAdapter(carList) { car ->
-            val intent = Intent(this, CarDetailsActivity::class.java).apply {
-                putExtra("CAR_DETAILS", car) // Passando o objeto Car
-            }
-            startActivity(intent)
+    private fun banners(images: List<SliderModel>) {
+        binding.viewPagerSlider.adapter = SliderAdapter(images, binding.viewPagerSlider)
+        binding.viewPagerSlider.clipToPadding = false
+        binding.viewPagerSlider.clipChildren = false
+        binding.viewPagerSlider.offscreenPageLimit = 3
+        binding.viewPagerSlider.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+        val compositePageTransformer = CompositePageTransformer().apply {
+            addTransformer(MarginPageTransformer(40))
         }
-
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(this@HomeActivity)
-            adapter = carAdapter
+        binding.viewPagerSlider.setPageTransformer(compositePageTransformer)
+        if (images.size > 1) {
+            binding.dotIndicator.visibility = View.VISIBLE
+            binding.dotIndicator.setViewPager2(binding.viewPagerSlider)
         }
-    }
-
-
-    private fun loadCarsFromDatabase() {
-       firestore.collection("Carros")
-           .get()
-           .addOnSuccessListener { result ->
-               carList.clear()
-               for (document in result) {
-                   val modeloDoCarro = document.getString("modeloDoCarro") ?: ""
-
-                   // Tratamento seguro do valor do carro
-                   val valorDoCarroString = document.getString("ValorDaLocação") ?: "0.0"
-                   val valorDoCarro = valorDoCarroString.toDoubleOrNull() ?: 0.0  // Convertendo a string para Double
-
-                   val fotos = document["Fotos"] as? List<String> ?: listOf()
-
-                   // Passando a lista 'fotos' para o construtor do carro
-                   val car = Car(modeloDoCarro, valorDoCarro, fotos, 2024)  // Corrigido
-                   carList.add(car)
-               }
-               carAdapter.notifyDataSetChanged()
-           }
-           .addOnFailureListener { e ->
-               Toast.makeText(this, "Erro ao carregar carros: ${e.message}", Toast.LENGTH_SHORT).show()
-           }
-   }
-
-
-    private fun filterByName(query: String) {
-        val filteredList = carList.filter { it.name.contains(query, ignoreCase = true) }
-        carAdapter.updateList(filteredList)
-    }
-
-    private fun filterByPrice(minPrice: Double, maxPrice: Double) {
-        val filteredList = carList.filter { it.price in minPrice..maxPrice }
-        carAdapter.updateList(filteredList)
     }
 }

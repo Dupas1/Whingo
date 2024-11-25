@@ -1,3 +1,4 @@
+// MainActivity.kt
 package com.example.whingo
 
 import android.content.Context
@@ -18,12 +19,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Inicializa o Firebase
+        auth = FirebaseAuth.getInstance()
+
         // Acessa o SharedPreferences diretamente aqui, sem usar função
         val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
 
         // Verifica se o usuário já está logado antes de carregar a interface
-        if (isLoggedIn == true) {
+        if (isLoggedIn) {
             // Se o usuário já estiver logado, redireciona para HomeActivity
             startActivity(Intent(this, HomeActivity::class.java))
             finish() // Fecha a MainActivity para evitar voltar
@@ -33,9 +37,6 @@ class MainActivity : AppCompatActivity() {
         // Carrega a interface somente se o usuário não estiver logado
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-
-        // Inicializa o FirebaseAuth
-        auth = FirebaseAuth.getInstance()
 
         // Botão de login
         binding?.btnLogin?.setOnClickListener {
