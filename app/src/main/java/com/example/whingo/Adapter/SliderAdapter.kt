@@ -29,12 +29,16 @@ class SliderAdapter(private var sliderItems: List<SliderModel>, private val view
         fun setImage(sliderItem: SliderModel) {
             val requestOptions = RequestOptions().transform(CenterInside())
 
-            Glide.with(context)
-                .load(sliderItem.url)
-                .apply(requestOptions)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .signature(ObjectKey(System.currentTimeMillis()))
-                .into(imageView)
+            if (sliderItem.url.isNotEmpty()) {
+                Glide.with(context)
+                    .load(sliderItem.url)
+                    .apply(requestOptions)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .signature(ObjectKey(System.currentTimeMillis()))
+                    .into(imageView)
+            } else {
+
+            }
         }
     }
 
