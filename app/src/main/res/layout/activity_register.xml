@@ -5,34 +5,34 @@
     android:id="@+id/LoginActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="786dp"
         android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="215dp"
-            android:background="@drawable/blue_bg">
+            android:background="@drawable/blue_bg1">
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
-                android:hint="Cadastre-se"
                 android:fontFamily="@font/poppins_regular"
-                android:textSize="45sp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/grey_white"
                 android:gravity="center"
+                android:hint="Cadastre-se"
                 android:letterSpacing="0.1"
-                android:textStyle="bold"
                 android:shadowColor="#000000"
                 android:shadowDx="2"
                 android:shadowDy="2"
-                android:shadowRadius="1.5" />
+                android:shadowRadius="1.5"
+                android:textColor="@color/white"
+                android:textColorHint="@color/grey_white"
+                android:textSize="45sp"
+                android:textStyle="bold" />
 
 
         </FrameLayout>
@@ -54,7 +54,7 @@
                 android:src="@drawable/icon" />
 
             <EditText
-                android:id="@+id/name"
+                android:id="@+id/etName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/icon"
@@ -67,10 +67,9 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
         </RelativeLayout>
-
 
 
         <RelativeLayout
@@ -90,7 +89,7 @@
                 android:src="@drawable/indentificacao" />
 
             <EditText
-                android:id="@+id/cpf"
+                android:id="@+id/etCpf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/indent_icon"
@@ -103,7 +102,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
 
         </RelativeLayout>
@@ -125,7 +124,7 @@
                 android:src="@drawable/phone" />
 
             <EditText
-                android:id="@+id/cell"
+                android:id="@+id/etCel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/cell_icon"
@@ -138,7 +137,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
 
         </RelativeLayout>
@@ -152,7 +151,7 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
-                android:id="@+id/birthDate"
+                android:id="@+id/etBirthDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@+id/birthDate_icon"
@@ -165,7 +164,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <ImageView
                 android:id="@+id/birthDate_icon"
@@ -186,7 +185,7 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
-                android:id="@+id/email"
+                android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/username_icon"
@@ -211,7 +210,6 @@
         </RelativeLayout>
 
 
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -221,7 +219,7 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
-                android:id="@+id/password"
+                android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/key"
@@ -235,7 +233,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <ImageView
                 android:id="@+id/key"
@@ -264,7 +262,7 @@
                 android:src="@drawable/password" />
 
             <EditText
-                android:id="@+id/confirmpassword"
+                android:id="@+id/etConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/pass_icon"
@@ -278,7 +276,7 @@
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
                 android:textCursorDrawable="@drawable/cursor_color"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <ImageView
                 android:id="@+id/confirm_pass_icon"
@@ -293,9 +291,9 @@
 
         <TextView
             android:id="@+id/btnRegister"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="62dp"
             android:layout_marginTop="18.7dp"
             android:layout_marginRight="62dp"
@@ -308,28 +306,17 @@
             android:textColor="#ffffff"
             android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/ivVoltar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="VOLTAR"
+            android:textColor="#1566e0"
+            android:textSize="10.5sp" />
+
     </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 </RelativeLayout>

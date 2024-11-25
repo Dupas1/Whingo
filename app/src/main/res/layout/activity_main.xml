@@ -15,7 +15,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="273dp"
-            android:background="@drawable/blue_bg">
+            android:background="@drawable/blue_bg1">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
-                android:id="@+id/username_input"
+                android:id="@+id/etEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/username_icon"
@@ -66,7 +66,7 @@
             android:background="@drawable/blue_border_rounded_cornwe">
 
             <EditText
-                android:id="@+id/pass"
+                android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/icon"
@@ -92,6 +92,7 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/btnLogin"
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -108,12 +109,24 @@
             android:textSize="12sp" />
 
         <TextView
+            android:id="@+id/tvEsqueciSenha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/poppins_medium"
             android:text="ESQUECEU A SENHA?"
+            android:textColor="#1566e0"
+            android:textSize="10.5sp" />
+
+        <TextView
+            android:id="@+id/tvCreateAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="CRIAR CONTA"
             android:textColor="#1566e0"
             android:textSize="10.5sp" />
     </LinearLayout>
