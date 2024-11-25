@@ -1,5 +1,6 @@
 package com.example.whingo
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -68,5 +69,22 @@ class PerfilActivity : AppCompatActivity() {
             val intent = Intent(this, SelectCardActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnLogout.setOnClickListener {
+            // Atualiza o SharedPreferences para marcar como deslogado
+            val sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putBoolean("isLoggedIn", false)
+            editor.apply()
+
+            // Redireciona para MainActivity
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish() // Finaliza a atividade atual para que o usuário não possa voltar
+        }
+
+
+
     }
 }

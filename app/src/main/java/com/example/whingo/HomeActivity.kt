@@ -76,9 +76,11 @@ class HomeActivity : AppCompatActivity() {
                    val valorDoCarro = valorDoCarroString.toDoubleOrNull() ?: 0.0  // Convertendo a string para Double
 
                    val fotos = document["Fotos"] as? List<String> ?: listOf()
+                   val AnoDoCarro = document.getString("AnoDoCarro") ?: ""
+                     val Telefone = document.getString("Telefone") ?: ""
 
                    // Passando a lista 'fotos' para o construtor do carro
-                   val car = Car(modeloDoCarro, valorDoCarro, fotos, 2024)  // Corrigido
+                   val car = Car(modeloDoCarro, valorDoCarro, fotos, AnoDoCarro , Telefone)  // Corrigido
                    carList.add(car)
                }
                carAdapter.notifyDataSetChanged()
@@ -86,6 +88,11 @@ class HomeActivity : AppCompatActivity() {
            .addOnFailureListener { e ->
                Toast.makeText(this, "Erro ao carregar carros: ${e.message}", Toast.LENGTH_SHORT).show()
            }
+
+        binding?.btnPerfil?.setOnClickListener {
+            val intent = Intent(this, PerfilActivity::class.java)
+            startActivity(intent)
+        }
    }
 
 
@@ -95,7 +102,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun filterByPrice(minPrice: Double, maxPrice: Double) {
-        val filteredList = carList.filter { it.price in minPrice..maxPrice }
+        val filteredList = carList.filter { it.ValordaLocação in minPrice..maxPrice }
         carAdapter.updateList(filteredList)
     }
 }

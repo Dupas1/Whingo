@@ -28,7 +28,7 @@ class CarAdapter(
         fun bind(car: Car) {
             // Configurar o nome e o preço do carro
             binding.tvCarName.text = car.name
-            binding.tvCarPrice.text = "R$ ${car.price}"
+            binding.tvCarPrice.text = "R$ ${car.ValordaLocação} por dia"
 
             // Verificar se há uma imagem para carregar
             // Dentro do CarAdapter

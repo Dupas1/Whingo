@@ -52,6 +52,13 @@ class SelectCardActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding?.btnFinishRent?.setOnClickListener {
+            val intent = Intent(this, FinishRentActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+
         /*
         binding.ivVoltar.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
