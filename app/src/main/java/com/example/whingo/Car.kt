@@ -5,22 +5,25 @@ import android.os.Parcelable
 
 data class Car(
     val name: String = "",
-    val price: Double = 0.0,
-    val photos: List<String> = emptyList(),  // Alteração aqui
-    val year: Int = 0
+    val ValordaLocação: Double = 0.0, // Alterado de "price" para "ValordaLocação"
+    val photos: List<String> = emptyList(), // Lista de fotos
+    val year: String = "", // Ano do carro
+    val Phone: String = "" // Telefone do dono do carro
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readDouble(),
         parcel.createStringArrayList() ?: emptyList(),
-        parcel.readInt()
+        parcel.readString() ?: "",
+        parcel.readString() ?: ""
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
-        parcel.writeDouble(price)
-        parcel.writeStringList(photos)  // Alteração aqui
-        parcel.writeInt(year)
+        parcel.writeDouble(ValordaLocação) // Alterado para "ValordaLocação"
+        parcel.writeStringList(photos)
+        parcel.writeString(year)
+        parcel.writeString(Phone)
     }
 
     override fun describeContents(): Int = 0
@@ -38,5 +41,3 @@ data class Car(
         }
     }
 }
-
-

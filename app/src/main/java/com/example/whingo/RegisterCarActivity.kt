@@ -52,11 +52,12 @@ class RegisterCarActivity : AppCompatActivity() {
             val carYear = binding?.etCarYear?.text.toString()
             val carPlate = binding?.etCarPlate?.text.toString()
             val carValueString = binding?.etCarValue?.text.toString()
+            val phone = binding?.etPhoneNumber?.text.toString()
 
             if (carModel.isNotEmpty() && carYear.isNotEmpty() && carColor.isNotEmpty() && carPlate.isNotEmpty() && carValueString.isNotEmpty()) {
                 if (carPlate.length <= 7) {
                     if (selectedImagesUris.size == 4) {
-                        saveCarWithPhotos(carModel, carColor, carYear, carPlate, carValueString)  // Passando carValueString como String
+                        saveCarWithPhotos(carModel, carColor, carYear, carPlate, carValueString, phone)  // Passando carValueString como String
                     } else {
                         Toast.makeText(this, "Por favor, selecione exatamente 4 fotos.", Toast.LENGTH_SHORT).show()
                     }
@@ -80,12 +81,13 @@ class RegisterCarActivity : AppCompatActivity() {
         carColor: String,
         carYear: String,
         carPlate: String,
-        carValue: String
+        carValue: String,
+        phone: String
     ) {
         val user = auth.currentUser
         if (user != null) {
             savePhotosToFirebase(carPlate) { photoUrls ->
-                saveCarToFirestore(carModel, carColor, carYear, carPlate, carValue, photoUrls)
+                saveCarToFirestore(carModel, carColor, carYear, carPlate, carValue, phone , photoUrls)
             }
         } else {
             Log.w(TAG, "SaveCar:failure")
@@ -118,7 +120,8 @@ class RegisterCarActivity : AppCompatActivity() {
         carColor: String,
         carYear: String,
         carPlate: String,
-        carValueString: String,  // Agora é String
+        carValueString: String,
+        phone: String,
         photoUrls: List<String>
     ) {
         val userId = auth.currentUser?.uid ?: return
@@ -128,7 +131,8 @@ class RegisterCarActivity : AppCompatActivity() {
             "CorDoCarro" to carColor,
             "AnoDoCarro" to carYear,
             "PlacaDoCarro" to carPlate,
-            "ValorDaLocação" to carValueString,  // Salvando como String
+            "ValorDaLocação" to carValueString,
+            "Telefone" to phone,
             "Fotos" to photoUrls
         )
 
