@@ -1,5 +1,6 @@
 package com.example.whingo
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -60,6 +61,12 @@ class PerfilActivity : AppCompatActivity() {
         // Clique no botão para editar o perfil
         binding.btnEditProfile.setOnClickListener {
             Toast.makeText(this, "Editar Perfil em breve!", Toast.LENGTH_SHORT).show()
+        }
+
+
+        binding?.btnSelectCard?.setOnClickListener {
+            val intent = Intent(this, SelectCardActivity::class.java)
+            startActivity(intent)
         }
     }
 }
