@@ -28,10 +28,6 @@ class RegisterActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        binding?.ivVoltar?.setOnClickListener {
-            // Handle back button click
-        }
-
         binding?.btnRegister?.setOnClickListener {
             val name = binding?.etName?.text.toString()
             val cpf = binding?.etCpf?.text.toString()

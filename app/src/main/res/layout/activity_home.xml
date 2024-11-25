@@ -403,18 +403,4 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
-    <Button
-        android:id="@+id/btnPerfil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Perfil"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/black"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btnAddCar"/>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
