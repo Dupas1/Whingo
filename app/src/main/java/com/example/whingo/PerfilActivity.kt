@@ -3,12 +3,13 @@ package com.example.whingo
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.whingo.databinding.ActivityPerfilBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
 
 class PerfilActivity : AppCompatActivity() {
@@ -18,6 +19,12 @@ class PerfilActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        this.window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        supportActionBar?.hide()
         binding = ActivityPerfilBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -64,7 +71,6 @@ class PerfilActivity : AppCompatActivity() {
             Toast.makeText(this, "Editar Perfil em breve!", Toast.LENGTH_SHORT).show()
         }
 
-
         binding?.btnSelectCard?.setOnClickListener {
             val intent = Intent(this, SelectCardActivity::class.java)
             startActivity(intent)
@@ -83,8 +89,5 @@ class PerfilActivity : AppCompatActivity() {
             startActivity(intent)
             finish() // Finaliza a atividade atual para que o usuário não possa voltar
         }
-
-
-
     }
 }

@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class CarDetailsActivity : AppCompatActivity() {
+class CarDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCarDetailBinding
     private var startDate: Calendar? = null

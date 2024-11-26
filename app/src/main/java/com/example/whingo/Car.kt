@@ -17,7 +17,7 @@ data class Car(
         parcel.createStringArrayList() ?: emptyList(),
         parcel.readString() ?: "",
 
-    )
+        )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(documentId)
