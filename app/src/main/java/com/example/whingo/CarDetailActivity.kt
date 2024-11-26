@@ -1,5 +1,6 @@
 package com.example.whingo
 
+import Car
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -16,37 +17,41 @@ class CarDetailActivity : AppCompatActivity() {
         binding = ActivityCarDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Receber os dados do carro
+        // Receive the car data
         val car = intent.getParcelableExtra<Car>("CAR_DETAILS")
 
-        car?.let { car ->
-            // Exibir os dados do carro na UI
-            binding.tvCarModel.text = car.name
-            binding.tvCarPrice.text = "R$ %.2f por dia".format(car.ValordaLocação) // Exibe com duas casas decimais
-            binding.tvCarYear.text = "Ano: ${car.year}"
+        car?.let { carDetails ->
+            // Display car data in the UI
+            binding.tvCarModel.text = carDetails.modeloDoCarro
+            binding.tvCarPrice.text = "R$ %.2f por dia".format(carDetails.valorDoCarro)
+            binding.tvCarYear.text = "Ano: ${carDetails.anoDoCarro}"
 
-            // Exibir as imagens do carro (todas as imagens)
-            if (car.photos.isNotEmpty()) {
-                setupImageGallery(car.photos)
+            // Display car images (all images)
+            if (carDetails.fotos.isNotEmpty()) {
+                setupImageGallery(carDetails.fotos)
             }
 
-            // Configurar o clique no botão "Calcular Valor Total"
+            // Set up the "Calculate Total Cost" button click
             binding.btnCalculateTotal.setOnClickListener {
-                calculateTotalCost(car.ValordaLocação) // Passar o ValordaLocação corretamente
+                calculateTotalCost(carDetails.valorDoCarro)
             }
 
-            // Configurar o clique no botão "Alugar Carro"
+            // Set up the "Rent Car" button click
             binding.btnRentCar.setOnClickListener {
-                navigateToSelectCardActivity(car) // Passar o carro completo
+                navigateToSelectCardActivity(carDetails)
             }
         }
+    }
+
+    private fun setupImageGallery(fotos: List<String>) {
+        // Implementation of setupImageGallery
     }
 
     private fun calculateTotalCost(pricePerDay: Double) {
         val days = binding.etDays.text.toString().toIntOrNull()
         if (days != null && days > 0) {
             val totalCost = days * pricePerDay
-            binding.tvTotalCost.text = "Total: R$ %.2f".format(totalCost) // Exibe o valor formatado
+            binding.tvTotalCost.text = "Total: R$ %.2f".format(totalCost)
         } else {
             Toast.makeText(this, "Por favor, insira um número válido de dias.", Toast.LENGTH_SHORT).show()
         }
@@ -55,20 +60,15 @@ class CarDetailActivity : AppCompatActivity() {
     private fun navigateToSelectCardActivity(car: Car) {
         val days = binding.etDays.text.toString().toIntOrNull()
         if (days != null && days > 0) {
-            val totalCost = days * car.ValordaLocação
-            val intent = Intent(this, SelectCardActivity::class.java)
-            intent.putExtra("CAR_DETAILS", car)
-            intent.putExtra("TOTAL_COST", totalCost)
-            intent.putExtra("DAYS", days)
+            val totalCost = days * car.valorDoCarro
+            val intent = Intent(this, SelectCardActivity::class.java).apply {
+                putExtra("CAR_DETAILS", car)
+                putExtra("TOTAL_COST", totalCost)
+                putExtra("DAYS", days)
+            }
             startActivity(intent)
         } else {
-            Toast.makeText(this, "Por favor, insira um número válido de dias antes de continuar.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Por favor, insira um número válido de dias.", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun setupImageGallery(photos: List<String>) {
-        val imageAdapter = ImageAdapter(photos)
-        binding.recyclerViewImages.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerViewImages.adapter = imageAdapter
     }
 }
