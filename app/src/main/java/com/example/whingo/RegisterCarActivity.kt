@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,15 +27,25 @@ class RegisterCarActivity : AppCompatActivity() {
     private lateinit var photosAdapter: PhotosAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Configuração para tela cheia e sem barra de título
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        this.window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        supportActionBar?.hide()
+
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterCarBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        // Configuração do RecyclerView para exibição de fotos
         binding?.rvCarPhotos?.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         photosAdapter = PhotosAdapter(selectedImagesUris)
         binding?.rvCarPhotos?.adapter = photosAdapter
 
+        // Limitação de caracteres para a placa do carro
         binding?.etCarPlate?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -42,10 +54,10 @@ class RegisterCarActivity : AppCompatActivity() {
                     binding?.etCarPlate?.setSelection(7) // Move o cursor para o final
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        // Botão para registrar o carro
         binding?.btnRegisterCar?.setOnClickListener {
             val carModel = binding?.etCarModel?.text.toString().toUpperCase()
             val carColor = binding?.etCarColor?.text.toString()
@@ -68,8 +80,7 @@ class RegisterCarActivity : AppCompatActivity() {
             }
         }
 
-
-
+        // Botão para abrir o seletor de imagens
         binding?.btnAlbum?.setOnClickListener {
             selectImagesInAlbum()
         }
@@ -128,7 +139,7 @@ class RegisterCarActivity : AppCompatActivity() {
             "CorDoCarro" to carColor,
             "AnoDoCarro" to carYear,
             "PlacaDoCarro" to carPlate,
-            "ValorDaLocação" to carValueString, 
+            "ValorDaLocação" to carValueString,
             "Fotos" to photoUrls
         )
 
@@ -148,8 +159,6 @@ class RegisterCarActivity : AppCompatActivity() {
                 Toast.makeText(this, "Erro ao registrar o carro", Toast.LENGTH_SHORT).show()
             }
     }
-
-
 
     fun selectImagesInAlbum() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
