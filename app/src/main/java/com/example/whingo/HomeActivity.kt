@@ -77,10 +77,10 @@ class HomeActivity : AppCompatActivity() {
 
                    val fotos = document["Fotos"] as? List<String> ?: listOf()
                    val AnoDoCarro = document.getString("AnoDoCarro") ?: ""
-                     val Telefone = document.getString("Telefone") ?: ""
+                   val documentId = document.id
 
                    // Passando a lista 'fotos' para o construtor do carro
-                   val car = Car(modeloDoCarro, valorDoCarro, fotos, AnoDoCarro , Telefone)  // Corrigido
+                   val car = Car(documentId,modeloDoCarro, valorDoCarro, fotos, AnoDoCarro)  // Corrigido
                    carList.add(car)
                }
                carAdapter.notifyDataSetChanged()
