@@ -30,6 +30,13 @@ class SelectCardActivity : AppCompatActivity() {
     private var cartaoSelecionado: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        requestWindowFeature(android.view.Window.FEATURE_NO_TITLE)
+        this.window.setFlags(
+            android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        supportActionBar?.hide()
+
         super.onCreate(savedInstanceState)
         binding = ActivitySelectCardBinding.inflate(layoutInflater)
         setContentView(binding.root)

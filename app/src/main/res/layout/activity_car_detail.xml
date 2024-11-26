@@ -2,107 +2,168 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <!-- RecyclerView para exibir as imagens do carro -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewImages"
+    <!-- CardView para o carrossel -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardCarousel"
+        android:layout_width="454dp"
+        android:layout_height="211dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- RecyclerView para exibir as imagens do carro -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewImages"
+            android:layout_width="match_parent"
+            android:layout_height="217dp" />
+    </androidx.cardview.widget.CardView>
+
+    <!-- CardView para informações do carro -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardCarInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cardCarousel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Nome do carro -->
+            <TextView
+                android:id="@+id/tvCarModel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nome do Carro"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Preço do carro -->
+            <TextView
+                android:id="@+id/tvCarPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="R$ 0.00 por dia"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Ano do carro -->
+            <TextView
+                android:id="@+id/tvCarYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ano: 2020"
+                android:textSize="18sp"
+                android:gravity="center" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- CardView para a seleção de datas -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardDateSelection"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cardCarInfo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Texto para exibir a data de início -->
+            <TextView
+                android:id="@+id/tvStartDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Data de início"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Texto para exibir a data de término -->
+            <TextView
+                android:id="@+id/tvEndDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Data de término"
+                android:textSize="18sp"
+                android:gravity="center" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Botão para selecionar intervalo de datas -->
+    <TextView
+        android:id="@+id/btnSelectDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Nome do carro -->
-    <TextView
-        android:id="@+id/tvCarModel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Nome do Carro"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewImages"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Preço do carro -->
-    <TextView
-        android:id="@+id/tvCarPrice"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="R$ 0.00 por dia"
-        app:layout_constraintTop_toBottomOf="@id/tvCarModel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Ano do carro -->
-    <TextView
-        android:id="@+id/tvCarYear"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Ano: 2020"
-        app:layout_constraintTop_toBottomOf="@id/tvCarPrice"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Texto para exibir a data de início -->
-    <TextView
-        android:id="@+id/tvStartDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Data de início"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvCarYear"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Texto para exibir a data de término -->
-    <TextView
-        android:id="@+id/tvEndDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Data de término"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvStartDate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- Botão para selecionar o intervalo de datas -->
-    <Button
-        android:id="@+id/btnSelectDate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="62dp"
+        android:background="@drawable/blue_fill__rounded_color"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:text="Selecionar Intervalo de Datas"
-        app:layout_constraintTop_toBottomOf="@id/tvEndDate"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/cardDateSelection"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Exibir o valor total calculado -->
     <TextView
         android:id="@+id/tvTotalCost"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Total: R$ 0.00"
-        android:textSize="16sp"
+        android:textSize="18sp"
+        android:gravity="center"
         android:layout_marginTop="16dp"
         app:layout_constraintTop_toBottomOf="@id/btnSelectDate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Botão Alugar Carro -->
-    <Button
+    <!-- Botão para alugar o carro -->
+    <TextView
         android:id="@+id/btnRentCar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="62dp"
+        android:background="@drawable/blue_fill__rounded_color"
+        android:fontFamily="@font/poppins_medium"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
         android:text="Alugar Carro"
-        android:layout_marginTop="16dp"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="@id/tvTotalCost"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

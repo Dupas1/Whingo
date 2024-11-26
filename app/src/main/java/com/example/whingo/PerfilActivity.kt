@@ -56,8 +56,6 @@ class PerfilActivity : AppCompatActivity() {
                     } else {
                         binding.ivUserPhoto.setImageResource(android.R.drawable.ic_menu_camera)
                     }
-                } else {
-                    Toast.makeText(this@PerfilActivity, "Usuário não encontrado!", Toast.LENGTH_SHORT).show()
                 }
             }
 

@@ -4,21 +4,29 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.whingo.databinding.ActivityFinishRentBinding
-import com.google.firebase.database.*
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
-import java.util.Calendar
+import android.content.Intent
 
 class FinishRentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFinishRentBinding
-    private lateinit var databaseReference: DatabaseReference
     private val firestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Configuração para tela cheia e sem barra de título
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        this.window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        supportActionBar?.hide()
+
         super.onCreate(savedInstanceState)
         binding = ActivityFinishRentBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -42,6 +50,13 @@ class FinishRentActivity : AppCompatActivity() {
         // Atualizar os TextView com as informações recuperadas
         binding.tvRentalPeriod.text = "Período: $rentalDays dias"
         binding.tvTotalCost.text = "Custo Total: R$ %.2f".format(totalCost)
+
+        // Configurar o botão para finalizar o aluguel e retornar à HomeActivity
+        binding.btnFinishRent.setOnClickListener {
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+            finish() // Finaliza a FinishRentActivity
+        }
     }
 
     private fun fetchCarData(carDocumentId: String) {
@@ -83,7 +98,6 @@ class FinishRentActivity : AppCompatActivity() {
 
     private fun fetchOwnerData(userId: String) {
         // Referência à coleção "pessoas" no Firestore
-        val firestore = FirebaseFirestore.getInstance()
         val documentRef = firestore.collection("pessoas").document(userId)
 
         // Buscar o documento diretamente pelo ID
@@ -127,13 +141,11 @@ class FinishRentActivity : AppCompatActivity() {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("CarPreferences", Context.MODE_PRIVATE)
         return sharedPreferences.getInt("RENTAL_DAYS", 0)
-
     }
 
     private fun getTotalCost(context: Context): Float {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("CarPreferences", Context.MODE_PRIVATE)
         return sharedPreferences.getFloat("TOTAL_COST", 0.0f)
-
     }
 }

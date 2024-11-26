@@ -12,152 +12,188 @@
     <!-- Foto do Carro -->
     <ImageView
         android:id="@+id/ivCarPhoto"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
+        android:layout_width="326dp"
+        android:layout_height="178dp"
         android:contentDescription="Foto do carro"
-        app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Título: Dados do Usuário -->
-    <TextView
-        android:id="@+id/tvUserInfoTitle"
-        android:layout_width="wrap_content"
+    <!-- CardView para Dados do Usuário -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardUserInfo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Dados do Usuário"
-        android:textStyle="bold"
-        android:textSize="16sp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
         app:layout_constraintTop_toBottomOf="@id/ivCarPhoto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp">
 
-    <!-- Nome do Usuário -->
-    <TextView
-        android:id="@+id/tvUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nome: "
-        app:layout_constraintTop_toBottomOf="@id/tvUserInfoTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <!-- Telefone do Usuário -->
-    <TextView
-        android:id="@+id/tvUserPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Telefone: "
-        app:layout_constraintTop_toBottomOf="@id/tvUserName"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="4dp" />
+            <!-- Título: Dados do Usuário -->
+            <TextView
+                android:id="@+id/tvUserInfoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dados do locatário"
+                android:textStyle="bold"
+                android:textSize="16sp" />
 
-    <!-- E-mail do Usuário -->
-    <TextView
-        android:id="@+id/tvUserEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="E-mail: "
-        app:layout_constraintTop_toBottomOf="@id/tvUserPhone"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="4dp" />
+            <!-- Nome do Usuário -->
+            <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nome: "
+                android:layout_marginTop="8dp" />
 
-    <!-- CPF do Usuário -->
-    <TextView
-        android:id="@+id/tvUserCpf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CPF: "
-        app:layout_constraintTop_toBottomOf="@id/tvUserEmail"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="4dp" />
+            <!-- Telefone do Usuário -->
+            <TextView
+                android:id="@+id/tvUserPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Telefone: "
+                android:layout_marginTop="4dp" />
 
-    <!-- Título: Dados do Carro -->
-    <TextView
-        android:id="@+id/tvCarInfoTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dados do Carro"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/tvUserCpf"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+            <!-- E-mail do Usuário -->
+            <TextView
+                android:id="@+id/tvUserEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="E-mail: "
+                android:layout_marginTop="4dp" />
 
-    <!-- Modelo do Carro -->
-    <TextView
-        android:id="@+id/tvCarModel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Modelo: "
-        app:layout_constraintTop_toBottomOf="@id/tvCarInfoTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp" />
+            <!-- CPF do Usuário -->
+            <TextView
+                android:id="@+id/tvUserCpf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CPF: "
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-    <!-- Ano do Carro -->
-    <TextView
-        android:id="@+id/tvCarYear"
-        android:layout_width="wrap_content"
+    <!-- CardView para Dados do Carro -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardCarInfo"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Ano: "
-        app:layout_constraintTop_toBottomOf="@id/tvCarModel"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="4dp" />
-
-    <!-- Preço por dia -->
-    <TextView
-        android:id="@+id/tvCarPrice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Preço por dia: "
-        app:layout_constraintTop_toBottomOf="@id/tvCarYear"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="4dp" />
-
-    <!-- Título: Detalhes da Locação -->
-    <TextView
-        android:id="@+id/tvRentalDetailsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Detalhes da Locação"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/tvCarPrice"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cardUserInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp">
 
-    <!-- Período da Locação -->
-    <TextView
-        android:id="@+id/tvRentalPeriod"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Período: "
-        app:layout_constraintTop_toBottomOf="@id/tvRentalDetailsTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="8dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <!-- Custo Total -->
-    <TextView
-        android:id="@+id/tvTotalCost"
-        android:layout_width="wrap_content"
+            <!-- Título: Dados do Carro -->
+            <TextView
+                android:id="@+id/tvCarInfoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dados do Carro"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <!-- Modelo do Carro -->
+            <TextView
+                android:id="@+id/tvCarModel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modelo: "
+                android:layout_marginTop="8dp" />
+
+            <!-- Ano do Carro -->
+            <TextView
+                android:id="@+id/tvCarYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ano: "
+                android:layout_marginTop="4dp" />
+
+            <!-- Preço por dia -->
+            <TextView
+                android:id="@+id/tvCarPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Preço por dia: "
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- CardView para Detalhes da Locação -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardRentalDetails"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Custo Total: "
-        app:layout_constraintTop_toBottomOf="@id/tvRentalPeriod"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintTop_toBottomOf="@id/cardCarInfo"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="4dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Título: Detalhes da Locação -->
+            <TextView
+                android:id="@+id/tvRentalDetailsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Detalhes da Locação"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <!-- Período da Locação -->
+            <TextView
+                android:id="@+id/tvRentalPeriod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Período: "
+                android:layout_marginTop="8dp" />
+
+            <!-- Custo Total -->
+            <TextView
+                android:id="@+id/tvTotalCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Custo Total: "
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <!-- Botão de Finalizar Locação -->
-    <Button
+    <TextView
         android:id="@+id/btnFinishRent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Finalizar Locação"
-        app:layout_constraintTop_toBottomOf="@id/tvTotalCost"
+        android:background="@drawable/blue_fill__rounded_color"
+        android:textColor="#ffffff"
+        android:gravity="center"
+        android:fontFamily="@font/poppins_medium"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/cardRentalDetails"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

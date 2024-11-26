@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +22,14 @@ class CarDetailActivity : AppCompatActivity() {
     private var endDate: Calendar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Configuração para tela cheia e sem barra de título
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        this.window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        supportActionBar?.hide()
+
         super.onCreate(savedInstanceState)
         binding = ActivityCarDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -158,7 +168,7 @@ class CarDetailActivity : AppCompatActivity() {
         editor.putInt("RENTAL_DAYS", days)
         editor.apply()
     }
-    
+
     private fun saveTotalCost(context: Context, totalCost: Double) {
         val sharedPreferences: SharedPreferences =
             context.getSharedPreferences("CarPreferences", Context.MODE_PRIVATE)
