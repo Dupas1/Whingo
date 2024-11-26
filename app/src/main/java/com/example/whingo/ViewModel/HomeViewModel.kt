@@ -11,12 +11,12 @@ import com.google.firebase.database.ValueEventListener
 
 class HomeViewModel : ViewModel() {
 
-    private val firebasedatabase = FirebaseDatabase.getInstance()
+    private val firebaseDatabase = FirebaseDatabase.getInstance()
     private val _banners = MutableLiveData<List<SliderModel>>()
     val banners: LiveData<List<SliderModel>> = _banners
 
     fun loadBanners() {
-        val ref = firebasedatabase.getReference("Banner")
+        val ref = firebaseDatabase.getReference("Banner")
         ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val lists = mutableListOf<SliderModel>()
@@ -26,15 +26,12 @@ class HomeViewModel : ViewModel() {
                         lists.add(list)
                     }
                 }
-
-                // Atualiza o LiveData com os banners recuperados
                 _banners.value = lists
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Adiciona tratamento de erro apropriado
-                _banners.value = emptyList() // Retorna uma lista vazia em caso de falha
-                println("Erro ao carregar banners: ${error.message}") // Log do erro
+                _banners.value = emptyList()
+                println("Erro ao carregar banners: ${error.message}")
             }
         })
     }
