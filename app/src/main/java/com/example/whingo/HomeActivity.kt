@@ -1,5 +1,6 @@
 package com.example.whingo
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
@@ -36,5 +37,23 @@ class HomeActivity : AppCompatActivity() {
         val viewPagerBanners: ViewPager2 = binding.viewPagerBanners
         viewPagerBanners.adapter = SliderAdapter(banners)
         viewPagerBanners.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+    }
+    private fun setupButtonNavigation() {
+        // Configuração do botão "Cartões"
+        binding.cartoes.setOnClickListener {
+            val intent = Intent(this, SelectCardActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Configuração do botão "Perfil"
+        binding.perfil.setOnClickListener {
+            val intent = Intent(this, PerfilActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupButtonNavigation()
     }
 }
